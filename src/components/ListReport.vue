@@ -53,6 +53,7 @@
           >
         </template>
       </v-data-table>
+
       <div class="pt-2 d-flex flex-column flex-md-row align-center justify-end">
         <span>Filas por páginas: </span>
         <span style="width: 50px" class="mx-md-2">

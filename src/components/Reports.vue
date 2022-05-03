@@ -36,6 +36,7 @@
 
 <script>
 import axios from 'axios';
+import { formatNumber, formatCurrency } from '@/assets/helpers';
 import ReportCard from './ReportCard.vue';
 import ListReport from './ListReport.vue';
 
@@ -109,7 +110,8 @@ export default {
         const { data } = await axios.get('');
         this.sales = data.map((item) => {
           const [date_closed] = item.date_closed.split(' ');
-          return { ...item, date_closed };
+          const total = formatCurrency(item.total);
+          return { ...item, date_closed, total };
         });
         console.log();
         this.loading = false;
@@ -157,35 +159,35 @@ export default {
         this.reports1.push({
           title: 'Cajero con más ventas',
           name: cashierMoreSales.name,
-          quantity: `${cashierMoreSales.quantity} ventas`,
+          quantity: `${formatNumber(cashierMoreSales.quantity)} ventas`,
         });
 
         this.reports1.push({
           title: 'Mesero con más ventas',
           name: waiterMoreSales.name,
-          quantity: `${waiterMoreSales.quantity} ventas`,
+          quantity: `${formatNumber(waiterMoreSales.quantity)} ventas`,
         });
 
         this.reports1.push({
           title: 'Plato con más ventas',
           name: productMoreSales.name,
-          quantity: `${productMoreSales.quantity} ventas`,
+          quantity: `${formatNumber(productMoreSales.quantity)} ventas`,
         });
 
         this.reports2.push({
           title: 'Zona con más ventas',
           name: zoneMoreSales.name,
-          quantity: `${zoneMoreSales.quantity} ventas`,
+          quantity: `${formatNumber(zoneMoreSales.quantity)} ventas`,
         });
 
         this.reports2.push({
           title: 'Total recaudado',
-          quantity: `${totalCollected} $`,
+          quantity: formatCurrency(totalCollected),
         });
 
         this.reports2.push({
           title: 'Cantidad de ventas',
-          quantity: numberOfSales,
+          quantity: formatNumber(numberOfSales),
         });
       } catch (error) {
         console.log(error);
