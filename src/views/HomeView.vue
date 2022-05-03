@@ -1,14 +1,15 @@
 <template>
-  <reports />
+  <hello-world />
 </template>
 
 <script>
-import Reports from '@/components/Reports.vue';
+import HelloWorld from '../components/HelloWorld';
 
 export default {
   name: 'Home',
+
   components: {
-    Reports,
+    HelloWorld,
   },
 };
 </script>

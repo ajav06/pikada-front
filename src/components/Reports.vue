@@ -1,0 +1,196 @@
+<template>
+  <v-container>
+    <div
+      class="d-flex flex-wrap justify-center justify-md-space-around align-stretch"
+    >
+      <span v-for="(item, id) in reports1" :key="id">
+        <report-card
+          :name="item.name"
+          :title="item.title"
+          :quantity="item.quantity"
+        />
+      </span>
+    </div>
+
+    <div
+      class="d-flex flex-wrap justify-center justify-md-space-around align-stretch"
+    >
+      <span v-for="(item, id) in reports2" :key="id">
+        <report-card
+          :name="item.name"
+          :title="item.title"
+          :quantity="item.quantity"
+        />
+      </span>
+    </div>
+
+    <list-report
+      :headers="headers"
+      :isSale="isSale"
+      :items="sales"
+      :title="title"
+      :loading="loading"
+    />
+  </v-container>
+</template>
+
+<script>
+import axios from 'axios';
+import ReportCard from './ReportCard.vue';
+import ListReport from './ListReport.vue';
+
+export default {
+  name: 'Reports',
+  components: { ReportCard, ListReport },
+  data() {
+    return {
+      title: 'Ventas',
+      reports1: [],
+      reports2: [],
+      isSale: true,
+      sales: [],
+      headers: [
+        {
+          text: 'Mesero',
+          align: 'center',
+          class:
+            'primary white--text rounded-tl-lg font-weight-bold text-subtitle-2',
+          value: 'waiter',
+        },
+        {
+          text: 'Cajero',
+          align: 'center',
+          class: 'primary white--text font-weight-bold text-subtitle-2',
+          value: 'cashier',
+        },
+        {
+          text: 'Fecha',
+          align: 'center',
+          class: 'primary white--text font-weight-bold text-subtitle-2',
+          value: 'date_closed',
+        },
+        {
+          text: 'Zona',
+          align: 'center',
+          class: 'primary white--text font-weight-bold text-subtitle-2',
+          value: 'zone',
+        },
+        {
+          text: 'Monto',
+          align: 'center',
+          class: 'primary white--text font-weight-bold text-subtitle-2',
+          value: 'total',
+        },
+        {
+          text: 'Platos',
+          align: 'center',
+          class: 'primary white--text font-weight-bold text-subtitle-2',
+          value: 'products',
+        },
+        {
+          text: 'Pagos',
+          align: 'center',
+          class:
+            'primary white--text rounded-tr-lg font-weight-bold text-subtitle-2',
+          value: 'payments',
+        },
+      ],
+      loading: true,
+    };
+  },
+  mounted() {
+    this.loadSales();
+    this.loadReports();
+  },
+  methods: {
+    async loadSales() {
+      try {
+        this.loading = true;
+        const { data } = await axios.get('');
+        this.sales = data.map((item) => {
+          const [date_closed] = item.date_closed.split(' ');
+          return { ...item, date_closed };
+        });
+        console.log();
+        this.loading = false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async loadReports() {
+      try {
+        const { data } = await axios.get('reports');
+        const {
+          totalCollected,
+          numberOfCashiers,
+          numberOfProducts,
+          numberOfSales,
+          numberOfWaiters,
+          numberOfZones,
+          cashierMoreSales,
+          productMoreSales,
+          waiterMoreSales,
+          zoneMoreSales,
+        } = data;
+
+        // this.items.push({
+        //   title: 'Cantidad de cajeros',
+        //   quantity: numberOfCashiers,
+        // });
+
+        // this.items.push({
+        //   title: 'Cantidad de meseros',
+        //   quantity: numberOfWaiters,
+        // });
+
+        // this.items.push({
+        //   title: 'Cantidad de productos',
+        //   quantity: numberOfProducts,
+        // });
+
+        // this.items.push({
+        //   title: 'Cantidad de zonas',
+        //   quantity: numberOfZones,
+        // });
+
+        this.reports1.push({
+          title: 'Cajero con más ventas',
+          name: cashierMoreSales.name,
+          quantity: `${cashierMoreSales.quantity} ventas`,
+        });
+
+        this.reports1.push({
+          title: 'Mesero con más ventas',
+          name: waiterMoreSales.name,
+          quantity: `${waiterMoreSales.quantity} ventas`,
+        });
+
+        this.reports1.push({
+          title: 'Plato con más ventas',
+          name: productMoreSales.name,
+          quantity: `${productMoreSales.quantity} ventas`,
+        });
+
+        this.reports2.push({
+          title: 'Zona con más ventas',
+          name: zoneMoreSales.name,
+          quantity: `${zoneMoreSales.quantity} ventas`,
+        });
+
+        this.reports2.push({
+          title: 'Total recaudado',
+          quantity: `${totalCollected} $`,
+        });
+
+        this.reports2.push({
+          title: 'Cantidad de ventas',
+          quantity: numberOfSales,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+};
+</script>
