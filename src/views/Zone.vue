@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <zones />
-  </div>
+  <zones />
 </template>
 
 <script>

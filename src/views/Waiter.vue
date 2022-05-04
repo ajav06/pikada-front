@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <waiters />
-  </div>
+  <waiters />
 </template>
 
 <script>

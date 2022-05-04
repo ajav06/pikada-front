@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <cashiers />
-  </div>
+  <cashiers />
 </template>
 
 <script>
