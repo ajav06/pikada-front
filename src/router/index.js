@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue';
 import Waiter from '@/views/Waiter.vue';
 import Cashier from '@/views/Cashier.vue';
 import Product from '@/views/Product.vue';
+import Zone from '@/views/Zone.vue';
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/product',
     name: 'Product',
     component: Product,
+  },
+  {
+    path: '/zone',
+    name: 'Zone',
+    component: Zone,
   },
 ];
 
