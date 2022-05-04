@@ -74,7 +74,6 @@ export default {
       sales: [],
       items: [],
       dialog: false,
-      type: 'PO',
       headers: [
         {
           text: 'Mesero',
@@ -178,7 +177,7 @@ export default {
           const total = formatCurrency(item.total);
           return { ...item, date_closed, total };
         });
-        console.log();
+
         this.loading = false;
       } catch (error) {
         console.log(error);

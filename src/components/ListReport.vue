@@ -84,12 +84,12 @@ export default {
     loading: Boolean,
   },
   data: () => ({
-    itemsPerPage: 5,
+    itemsPerPage: 3,
     pageVisible: 5,
     page: 1,
     pageCount: 0,
     search: '',
-    itemsPerPages: [5, 10, 20, 30, 50, 100],
+    itemsPerPages: [3, 5, 10, 20, 30, 50, 100],
   }),
 };
 </script>

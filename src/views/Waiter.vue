@@ -1,16 +1,16 @@
 <template>
   <div>
-    <reports />
+    <waiters />
   </div>
 </template>
 
 <script>
-import Reports from '@/components/Reports.vue';
+import Waiters from '@/components/Waiters.vue';
 
 export default {
-  name: 'Home',
+  name: 'Waiter',
   components: {
-    Reports,
+    Waiters,
   },
 };
 </script>
