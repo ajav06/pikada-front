@@ -1,6 +1,6 @@
 <template>
   <v-card class="rounded-xl py-3 mt-5">
-    <h4 class="text-center text-h4 mb-3">{{ title }}</h4>
+    <h4 class="text-center text-h4 my-3">{{ title }}</h4>
 
     <div
       class="mx-5 mx-md-7 px-md-7 d-flex flex-column flex-md-row align-center align-md-baseline"
@@ -35,7 +35,7 @@
             icon
             @click="
               () => {
-                item;
+                $emit('products', item.products);
               }
             "
             ><v-icon small color="primary">mdi-eye</v-icon></v-btn
@@ -46,7 +46,7 @@
             icon
             @click="
               () => {
-                item;
+                $emit('payments', item.payments);
               }
             "
             ><v-icon small color="primary">mdi-eye</v-icon></v-btn
@@ -79,7 +79,7 @@ export default {
   props: {
     headers: Array,
     items: Array,
-    isSale: Boolean,
+    isSale: { type: Boolean, default: false },
     title: String,
     loading: Boolean,
   },

@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <div
-      class="d-flex flex-wrap justify-center justify-md-space-around align-stretch"
+      class="d-flex flex-wrap justify-center justify-md-space-around align-stretch flex-grow-0 flex-shrink-1"
     >
-      <span v-for="(item, id) in reports1" :key="id">
+      <span v-for="(item, id) in reports" :key="id">
         <report-card
           :name="item.name"
           :title="item.title"
@@ -12,7 +12,7 @@
       </span>
     </div>
 
-    <div
+    <!-- <div
       class="d-flex flex-wrap justify-center justify-md-space-around align-stretch"
     >
       <span v-for="(item, id) in reports2" :key="id">
@@ -22,7 +22,7 @@
           :quantity="item.quantity"
         />
       </span>
-    </div>
+    </div> -->
 
     <list-report
       :headers="headers"
@@ -30,6 +30,28 @@
       :items="sales"
       :title="title"
       :loading="loading"
+      @products="
+        (data) => {
+          loadProducts(data);
+        }
+      "
+      @payments="
+        (data) => {
+          loadPayments(data);
+        }
+      "
+    />
+
+    <list-dialog
+      :isActive="dialog"
+      :items="items"
+      :headers="headersDialog"
+      :title="titleDialog"
+      @dismiss="
+        () => {
+          dismiss();
+        }
+      "
     />
   </v-container>
 </template>
@@ -39,17 +61,20 @@ import axios from 'axios';
 import { formatNumber, formatCurrency } from '@/assets/helpers';
 import ReportCard from './ReportCard.vue';
 import ListReport from './ListReport.vue';
+import ListDialog from './ListDialog.vue';
 
 export default {
   name: 'Reports',
-  components: { ReportCard, ListReport },
+  components: { ReportCard, ListReport, ListDialog },
   data() {
     return {
       title: 'Ventas',
-      reports1: [],
-      reports2: [],
+      reports: [],
       isSale: true,
       sales: [],
+      items: [],
+      dialog: false,
+      type: 'PO',
       headers: [
         {
           text: 'Mesero',
@@ -97,11 +122,51 @@ export default {
         },
       ],
       loading: true,
+      headersDialog: [],
+      titleDialog: '',
+      headersProduct: [
+        {
+          text: 'Nombre',
+          align: 'center',
+          class:
+            'primary white--text rounded-tl-lg font-weight-bold text-subtitle-2',
+          value: 'name',
+        },
+        {
+          text: 'Cantidad',
+          align: 'center',
+          class: 'primary white--text font-weight-bold text-subtitle-2',
+          value: 'quantity',
+        },
+        {
+          text: 'Precio',
+          align: 'center',
+          class:
+            'primary white--text rounded-tr-lg font-weight-bold text-subtitle-2',
+          value: 'price',
+        },
+      ],
+      headersPayment: [
+        {
+          text: 'Tipo',
+          align: 'center',
+          class:
+            'primary white--text rounded-tl-lg font-weight-bold text-subtitle-2',
+          value: 'type',
+        },
+        {
+          text: 'Monto',
+          align: 'center',
+          class:
+            'primary white--text rounded-tr-lg font-weight-bold text-subtitle-2',
+          value: 'amount',
+        },
+      ],
     };
   },
-  mounted() {
-    this.loadSales();
-    this.loadReports();
+  async mounted() {
+    await this.loadSales();
+    await this.loadReports();
   },
   methods: {
     async loadSales() {
@@ -156,42 +221,72 @@ export default {
         //   quantity: numberOfZones,
         // });
 
-        this.reports1.push({
+        this.reports.push({
           title: 'Cajero con más ventas',
           name: cashierMoreSales.name,
           quantity: `${formatNumber(cashierMoreSales.quantity)} ventas`,
         });
 
-        this.reports1.push({
+        this.reports.push({
           title: 'Mesero con más ventas',
           name: waiterMoreSales.name,
           quantity: `${formatNumber(waiterMoreSales.quantity)} ventas`,
         });
 
-        this.reports1.push({
+        this.reports.push({
           title: 'Plato con más ventas',
           name: productMoreSales.name,
           quantity: `${formatNumber(productMoreSales.quantity)} ventas`,
         });
 
-        this.reports2.push({
+        this.reports.push({
           title: 'Zona con más ventas',
           name: zoneMoreSales.name,
           quantity: `${formatNumber(zoneMoreSales.quantity)} ventas`,
         });
 
-        this.reports2.push({
+        this.reports.push({
           title: 'Total recaudado',
           quantity: formatCurrency(totalCollected),
         });
 
-        this.reports2.push({
+        this.reports.push({
           title: 'Cantidad de ventas',
           quantity: formatNumber(numberOfSales),
         });
       } catch (error) {
         console.log(error);
       }
+    },
+
+    loadProducts(data) {
+      this.dialog = true;
+
+      this.items = data?.map((item) => {
+        const price = formatCurrency(item.price);
+        return { ...item, price };
+      });
+      this.titleDialog = 'Productos';
+      this.headersDialog = this.headersProduct;
+    },
+
+    loadPayments(data) {
+      this.dialog = true;
+
+      this.items = data?.map((item) => {
+        const amount = formatCurrency(item.amount);
+        return { ...item, amount };
+      });
+
+      this.titleDialog = 'Pagos';
+      this.headersDialog = this.headersPayment;
+    },
+
+    dismiss() {
+      this.dialog = false;
+      this.items = [];
+      this.headersDialog = [];
+      this.titleDialog = '';
     },
   },
 };
