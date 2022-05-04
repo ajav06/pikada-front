@@ -7,7 +7,7 @@
   >
     <span>
       <div class="d-flex justify-end">
-        <v-btn color="black" icon @click="$emit('dismiss')"
+        <v-btn color="black" @click="$emit('dismiss')" fab dark small
           ><v-icon>mdi-close</v-icon></v-btn
         >
       </div>

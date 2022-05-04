@@ -19,6 +19,17 @@
       :title="title"
       :loading="loading"
     />
+
+    <div class="text-center my-5 my-md-10">
+      <v-btn
+        depressed
+        color="primary"
+        @click="$router.push('/')"
+        class="rounded-lg"
+      >
+        Inicio
+      </v-btn>
+    </div>
   </v-container>
 </template>
 

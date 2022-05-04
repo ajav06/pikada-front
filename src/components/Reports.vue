@@ -3,12 +3,21 @@
     <div
       class="d-flex flex-wrap justify-center justify-md-space-around align-stretch flex-grow-0 flex-shrink-1"
     >
-      <span v-for="(item, id) in reports" :key="id">
-        <report-card
-          :name="item.name"
-          :title="item.title"
-          :quantity="item.quantity"
-        />
+      <span v-for="(item, id) in reports" :key="id" class="my-2">
+        <v-hover>
+          <template v-slot:default="{ hover }">
+            <div
+              :class="item.isList ? `elevation-${hover ? 24 : 0}` : ''"
+              class="ma-2 px-0 rounded-xl transition-swing"
+              @click="item.isList ? $router.push(`${item.redirect}`) : ''"
+            >
+              <report-card
+                :name="item.name"
+                :title="item.title"
+                :quantity="item.quantity"
+              />
+            </div> </template
+        ></v-hover>
       </span>
     </div>
 
@@ -189,59 +198,43 @@ export default {
         const { data } = await axios.get('reports');
         const {
           totalCollected,
-          numberOfCashiers,
-          numberOfProducts,
           numberOfSales,
-          numberOfWaiters,
-          numberOfZones,
           cashierMoreSales,
           productMoreSales,
           waiterMoreSales,
           zoneMoreSales,
         } = data;
 
-        // this.items.push({
-        //   title: 'Cantidad de cajeros',
-        //   quantity: numberOfCashiers,
-        // });
-
-        // this.items.push({
-        //   title: 'Cantidad de meseros',
-        //   quantity: numberOfWaiters,
-        // });
-
-        // this.items.push({
-        //   title: 'Cantidad de productos',
-        //   quantity: numberOfProducts,
-        // });
-
-        // this.items.push({
-        //   title: 'Cantidad de zonas',
-        //   quantity: numberOfZones,
-        // });
-
         this.reports.push({
           title: 'Cajero con más ventas',
           name: cashierMoreSales.name,
           quantity: `${formatNumber(cashierMoreSales.quantity)} ventas`,
+          isList: true,
+          redirect: 'cashier',
         });
 
         this.reports.push({
           title: 'Mesero con más ventas',
           name: waiterMoreSales.name,
           quantity: `${formatNumber(waiterMoreSales.quantity)} ventas`,
+          isList: true,
+          redirect: 'waiter',
         });
 
         this.reports.push({
           title: 'Plato con más ventas',
           name: productMoreSales.name,
           quantity: `${formatNumber(productMoreSales.quantity)} ventas`,
+          isList: true,
+          redirect: 'product',
         });
 
         this.reports.push({
           title: 'Zona con más ventas',
           name: zoneMoreSales.name,
           quantity: `${formatNumber(zoneMoreSales.quantity)} ventas`,
+          isList: true,
+          redirect: 'zone',
         });
 
         this.reports.push({

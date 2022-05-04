@@ -2,7 +2,7 @@
   <v-card
     width="260"
     height="120"
-    class="rounded-xl elevation-3 ma-2"
+    class="rounded-xl elevation-3"
     color="primary"
   >
     <v-card-text class="text-center white--text">
