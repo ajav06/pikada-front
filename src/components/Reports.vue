@@ -107,7 +107,7 @@ export default {
           value: 'total',
         },
         {
-          text: 'Platos',
+          text: 'Productos',
           align: 'center',
           class: 'primary white--text font-weight-bold text-subtitle-2',
           value: 'products',
